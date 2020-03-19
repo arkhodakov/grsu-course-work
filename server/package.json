@@ -1,0 +1,24 @@
+{
+  "name": "bug-tracker",
+  "version": "1.0.0",
+  "description": "Course work bug tracker project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Altairka/grsu-course-work.git"
+  },
+  "keywords": [
+    "course-work",
+    "bug-tracker",
+    "react"
+  ],
+  "author": "Artem Khodakov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Altairka/grsu-course-work/issues"
+  },
+  "homepage": "https://github.com/Altairka/grsu-course-work#readme"
+}
