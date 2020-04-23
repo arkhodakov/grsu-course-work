@@ -1,8 +1,6 @@
 {
-  "name": "bug-tracker",
-  "description": "",
-  "version": "0.0.0",
-  "homepage": "",
+  "name": "bug-tracker-server",
+  "version": "0.1.0",
   "private": true,
   "main": "src",
   "keywords": [
