@@ -1,0 +1,21 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        docker login docker.pkg.github.com -u akhodakov -p ${{ secrets.GH_TOKEN }} \
+        docker build -t docker.pkg.github.com/akhodakov/grsu-course-work/cw-bug-tracker:$(date +%s) . \
+        docker push docker.pkg.github.com/akhodakov/grsu-course-work/cw-bug-tracker:$(date +%s)
