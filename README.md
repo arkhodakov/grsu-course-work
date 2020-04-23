@@ -1,6 +1,6 @@
 # CW: Bug Tracker
 
-![Node.js CI](https://github.com/akhodakov/grsu-course-work/workflows/Node.js%20CI/badge.svg?branch=master)
+![Docker](https://github.com/akhodakov/grsu-course-work/workflows/Docker/badge.svg?branch=master)
 
 Курсовой проект 6-го семестра специальности **УИР-171**
 
