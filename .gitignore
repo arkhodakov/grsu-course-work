@@ -31,6 +31,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Ignore build
+web/build
+server/build
+
 # Ignore templates content
 web/template/*/*
 !web/template/*/README.md
