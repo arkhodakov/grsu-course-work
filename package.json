@@ -1,0 +1,15 @@
+{
+  "name": "bug-tracker",
+  "version": "0.0.1",
+  "author": {
+    "name": "Artem Khodakov",
+    "email": "altair999z@gmail.com"
+  },
+  "engines": {
+    "node": "^12.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "build": "(cd web && npm run build)"
+  }
+}

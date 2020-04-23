@@ -1,6 +1,6 @@
 {
   "name": "bug-tracker-server",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "main": "src",
   "keywords": [
@@ -8,7 +8,7 @@
   ],
   "author": {
     "name": "Artem Khodakov",
-    "email": "artem.khodakov@exposit.com"
+    "email": "altair999z@gmail.com"
   },
   "contributors": [],
   "bugs": {},

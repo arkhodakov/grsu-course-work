@@ -1,10 +1,10 @@
 {
   "name": "bug-tracker-web",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "author": {
     "name": "Artem Khodakov",
-    "email": "artem.khodakov@exposit.com"
+    "email": "altair999z@gmail.com"
   },
   "dependencies": {
     "@feathersjs/express": "^4.5.2",
