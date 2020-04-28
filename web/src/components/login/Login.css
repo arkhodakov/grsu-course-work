@@ -3,3 +3,18 @@
   background-position: center;
   background-size: cover;
 }
+
+button:disabled {
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.invalid {
+  border-color: #ec5b5b;
+  box-shadow: 0 0 0 0.2rem #c4252542;
+}
+
+.valid {
+  border-color: #11a10c !important;
+  box-shadow: 0 0 0 0.2rem #11a10c40;
+}
