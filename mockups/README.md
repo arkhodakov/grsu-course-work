@@ -1,1 +1,0 @@
-# CW: Bug Tracker - Mockups
