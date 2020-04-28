@@ -71,3 +71,27 @@ Bug Tracker - это система с функционалом, обеспеч�
 ## Лицензирование
 
 Этот проект лицензируется с помощью MIT License. Подробный текст лицензии можно найти в файлк [LICENSE](./LICENSE)
+
+## Общий список использованных источников
+
+### Others
+
+Google Kubernetes Engine - GitHub Actions [Электронный ресурс] - 2020. - Режим доступа: https://github.com/GoogleCloudPlatform/github-actions/tree/master/example-workflows/gke. - Дата доступа: 28.04.2020.
+
+### Backend
+
+How to Prevent SQL Injection in Node.js [Электронный ресурс] - 2018. - Режим доступа: https://www.veracode.com/blog/secure-development/how-prevent-sql-injection-nodejs. - Дата доступа: 27.04.2020.
+
+SQL Tutorial [Электронный ресурс] - 2020. - Режим доступа: https://www.w3schools.com/sql/. - Дата доступа: 26.04.2020
+
+Create and Deploy a Node.js, Express, & PostgreSQL REST API [Электронный ресурс] - 2019. - Режим доступа: https://www.taniarascia.com/node-express-postgresql-heroku/. - Дата доступа: 26.04.2020.
+
+Welcome. Node-Postgres [Электронный ресурс] - 2020. - Режим доступа: https://www.taniarascia.com/node-express-postgresql-heroku/. - Дата доступа: 27.04.2020.
+
+### Database
+
+PostgreSQL CREATE TABLE [Электронный ресурс] - 2020. - Режим доступа: https://www.postgresqltutorial.com/postgresql-create-table/. - Дата доступа: 28.04.2020.
+
+### Frontend
+
+Bootstrap. Introduction [Электронный ресурс] - 2020. - Режим доступа: https://getbootstrap.com/docs/4.4/getting-started/introduction/. - Дата доступа: 26.04.2020.

@@ -1,9 +1,0 @@
-.github
-.private
-
-web/node_modules
-web/build
-web/template
-
-server/node_modules
-server/build

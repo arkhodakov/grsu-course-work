@@ -1,0 +1,32 @@
+version: '3'
+services: 
+    
+    cw-web:
+        build:
+            context: ./web
+        container_name: cw-bug-tracker
+        volumes:
+            - node_modules/
+        environment: 
+            - DB_SERVER=cw-postgres
+            - POSTGRES_DB=bugtracker
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=admin
+        ports:
+            - 4200:4200
+        links:
+            - cw-postgres
+
+    cw-server:
+        build:
+            context: ./server
+        container_name: cw-server
+        volumes:
+            - node_modules/
+        ports:
+            - 8080:8080
+        links: 
+            - cw-web
+
+volumes:
+    cw-data:

@@ -1,0 +1,6 @@
+# NPM : Node Modules
+node_modules
+
+# Custom : Build & Templates directories
+build
+template
