@@ -62,11 +62,10 @@ export default class Footer extends React.Component {
                 style={{ width: 60 + "px" }}
               />
               <p>
-                <i class="fa fa-home mr-1"></i> Belarus, Grodno, 22 Ozheshko
-                str.
+                <i class="fa fa-home mr-1"></i> BY, Grodno, 22 Ozheshko str.
               </p>
               <p>
-                <i class="fa fa-envelope mr-1"></i> xyz@gmail.com
+                <i class="fa fa-envelope mr-1"></i> bugtracker@gmail.com
               </p>
             </div>
           </div>

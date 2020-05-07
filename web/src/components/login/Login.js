@@ -1,20 +1,40 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { authAccount } from "../../actions";
 
 import "./Login.css";
 
-export default class Login extends React.Component {
+const mapStateToProps = (state) => {
+  return { account: state.account };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticate: (email, password) => dispatch(authAccount(email, password)),
+  };
+};
+
+class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      redirect: false,
       email: "",
       password: "",
-      validated: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    const account = this.props.account
+
+    
   }
 
   handleChange = (e) => {
@@ -44,14 +64,26 @@ export default class Login extends React.Component {
     if (!e.target.checkValidity()) {
       return;
     } else {
-      const email = this.state.email.value;
-      const password = this.state.password.value;
+      const email = this.state.email;
+      const password = this.state.password;
+
+      // TODO: Authenticate things
+
+      // Сохранение результатов в Redux Storage
+      this.props.authenticate(email, password);
+
+      // Обновление редиректа
+      this.setState({
+        redirect: true,
+      });
     }
   };
 
   render() {
+    const redirect = this.state.redirect ? <Redirect to="/dashboard" /> : null;
     return (
       <div class="container">
+        {redirect}
         <div class="row justify-content-center h-100">
           <div class="col-xl-10 col-lg-12 col-md-9">
             <div class="card o-hidden border-0 shadow-lg my-5">
@@ -143,3 +175,7 @@ export default class Login extends React.Component {
     );
   }
 }
+
+const Component = connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default Component;

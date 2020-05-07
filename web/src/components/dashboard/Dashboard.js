@@ -1,8 +1,19 @@
 import React from "react";
+import { connect } from "react-redux";
 
-import Navigation from "./Navigation";
+import Navigation from "../navigation";
 
-export default class Dashboard extends React.Component {
+const mapStateToProps = (state) => {
+  return { 
+    
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -18,3 +29,7 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+const Component = connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+
+export default Component;
