@@ -21,10 +21,11 @@ export default class Home extends React.Component {
                 </p>
                 <a
                   href="https://github.com/akhodakov/grsu-course-work"
-                  class="fa fa-github"
                   target="_blank"
                   rel="noopener noreferrer"
-                ></a>
+                >
+                  <i class="fa fa-github"></i>
+                </a>
                 <a
                   href="/login"
                   role="button"
