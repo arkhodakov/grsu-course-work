@@ -1,5 +1,6 @@
-var fs = require("fs");
-require("dotenv").config();
+const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config()
 
 const { Pool } = require("pg");
 
@@ -25,3 +26,5 @@ const pool = new Pool({
 });
 
 module.exports = { pool };
+
+require("make-runnable");
