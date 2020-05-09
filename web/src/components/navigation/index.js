@@ -119,7 +119,7 @@ class Navigation extends React.Component {
     var profile = this.getProfile();
 
     return (
-      <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top d-flex justify-content-end shadow-sm">
+      <nav className="navbar navbar-expand navbar-light bg-white topbar static-top d-flex justify-content-end shadow-sm">
         {this.state.redirect ? <Redirect to="/" /> : null}
         <button
           id="sidebarToggleTop"
