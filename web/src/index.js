@@ -9,7 +9,7 @@ import "./custom.css";
 
 import rootReducer from "./reducers";
 
-import App from "./components/app/App";
+import App from "./components/app";
 
 import dotenv from "dotenv";
 dotenv.config();

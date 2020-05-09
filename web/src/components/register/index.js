@@ -6,7 +6,7 @@ import axios from "axios";
 
 import * as actions from "../../actions";
 
-import "./styles.css";
+import "./style.css";
 
 class Register extends React.Component {
   constructor(props) {

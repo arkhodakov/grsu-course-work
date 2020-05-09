@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Home from "../home/Home";
+import Home from "../home";
 import Dashboard from "../dashboard";
 
 import Login from "../login";
@@ -10,7 +10,7 @@ import Register from "../register";
 import NotFoundPage from "../pages-status/NotFound";
 import ForbiddenPage from "../pages-status/Forbidden";
 
-import "./App.css";
+import "./style.css";
 
 function App() {
   return (

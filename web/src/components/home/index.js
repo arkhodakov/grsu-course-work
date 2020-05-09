@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Footer from "../footer/Footer";
+import Footer from "../footer";
 
-import "./Home.css";
+import "./style.css";
 
 export default class Home extends React.Component {
   render() {

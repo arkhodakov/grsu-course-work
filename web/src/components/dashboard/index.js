@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 import Navigation from "../navigation";
 
+import "./style.css"
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
