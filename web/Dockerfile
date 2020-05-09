@@ -1,6 +1,6 @@
 FROM node:12-alpine
 
-WORKDIR /cw-bug-tracker
+WORKDIR /web
 COPY . .
 
 # Install & Build Web Application --silent
