@@ -1,14 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
-const mapStateToProps = (state) => {
-  return { account: state.account };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
+import * as actions from "../../actions";
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -31,13 +25,19 @@ class Navigation extends React.Component {
           type: "success",
         },
       ],
+      redirect: false,
     };
 
     this.onLogoutClick = this.onLogoutClick.bind(this);
     this.onSearch = this.onSearch.bind(this);
   }
 
-  onLogoutClick = () => {};
+  onLogoutClick = () => {
+    this.props.logout();
+    this.setState({
+      redirect: true,
+    });
+  };
 
   onSearch = () => {};
 
@@ -118,6 +118,7 @@ class Navigation extends React.Component {
 
     return (
       <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top d-flex justify-content-end shadow-sm">
+        {this.state.redirect ? <Redirect to="/" /> : null}
         <button
           id="sidebarToggleTop"
           className="btn btn-link d-md-none rounded-circle mr-3"
@@ -248,7 +249,12 @@ class Navigation extends React.Component {
                 >
                   Cancel
                 </button>
-                <button class="btn btn-primary" onClick={this.onLogoutClick}>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  data-dismiss="modal"
+                  onClick={this.onLogoutClick}
+                >
                   Logout
                 </button>
               </div>
@@ -259,6 +265,16 @@ class Navigation extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return { account: state.account };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => dispatch(actions.logout()),
+  };
+};
 
 const Component = connect(mapStateToProps, mapDispatchToProps)(Navigation);
 

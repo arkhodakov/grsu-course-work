@@ -1,35 +1,19 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { createStore, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-
-import rootReducer from "../../reducers";
 
 import Home from "../home/Home";
 import Dashboard from "../dashboard/Dashboard";
 
-import Login from "../login/Login";
-import Register from "../register/Register";
+import Login from "../login";
+import Register from "../register";
 
 import NotFoundPage from "../pages-status/NotFound";
 import ForbiddenPage from "../pages-status/Forbidden";
 
 import "./App.css";
 
-export const store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__
-      ? window.__REDUX_DEVTOOLS_EXTENSION__()
-      : (f) => f
-  )
-);
-
 function App() {
   return (
-    <Provider store={store}>
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
@@ -43,7 +27,6 @@ function App() {
           <Route component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
-    </Provider>
   );
 }
 

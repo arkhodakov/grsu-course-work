@@ -1,13 +1,20 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import axios from "axios";
 
-import "./Register.css";
+import * as actions from "../../actions";
 
-export default class Register extends React.Component {
+import "./styles.css";
+
+class Register extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      redirect: false,
+      error: null,
       email: "",
       password: "",
       passwordCheck: "",
@@ -17,6 +24,16 @@ export default class Register extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  checkValidity() {
+    var form = document.getElementById("register-form");
+
+    var password = document.getElementsByName("password")[0];
+    var passwordCheck = document.getElementsByName("passwordCheck")[0];
+
+    var valid = form.checkValidity() * (password.value == passwordCheck.value);
+    return valid;
   }
 
   handleChange = (e) => {
@@ -31,22 +48,84 @@ export default class Register extends React.Component {
       e.target.classList.remove("valid", "invalid");
     }
 
+    if (name == "password" || name == "passwordCheck") {
+      var password = document.getElementsByName("password")[0];
+      var passwordCheck = document.getElementsByName("passwordCheck")[0];
+
+      if (password.value != passwordCheck.value) {
+        password.classList.remove("valid", "invalid");
+        password.classList.add("invalid");
+
+        passwordCheck.classList.remove("valid", "invalid");
+        passwordCheck.classList.add("invalid");
+      } else {
+        password.classList.remove("valid", "invalid");
+        password.classList.add("valid");
+
+        passwordCheck.classList.remove("valid", "invalid");
+        passwordCheck.classList.add("valid");
+      }
+    }
+
     this.setState({
-      [name]: value
+      [name]: value,
     });
 
-    var form = document.getElementById("register-form")
     var submitButton = document.getElementById("submitButton");
-    submitButton.disabled = !form.checkValidity()
+    submitButton.disabled = !this.checkValidity();
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
+
+    const email = this.state.email;
+    const name = this.state.firstName + " " + this.state.lastName;
+    const password = this.state.password;
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "api/v1/account/signup", {
+        email: email,
+        name: name,
+        password: password,
+      })
+      .then((response) => {
+        var name = response.data.name;
+        var token = response.data.token;
+
+        this.props.authenticate(email, name, token);
+
+        this.setState({
+          redirect: true,
+        });
+      })
+      .catch((error) => {
+        if (error.response) {
+          var message = error.response.data.message;
+          this.setState({
+            error: message,
+          });
+        } else {
+          this.setState({
+            error: "Internal server error : 500",
+          });
+        }
+      });
   };
 
   render() {
+    const exception = this.state.error ? (
+      <div class="alert alert-danger mt-2 text-center" role="alert">
+        {this.state.error}
+      </div>
+    ) : (
+      <div class="alert alert-success mt-2 text-center" role="alert">
+        You can connect securely
+      </div>
+    );
+
     return (
       <div class="container">
+        {this.state.redirect ? <Redirect to="/dashboard" /> : null}
         <div class="card o-hidden border-0 shadow-lg my-5">
           <div class="card-body p-0">
             <div class="row">
@@ -56,7 +135,12 @@ export default class Register extends React.Component {
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                   </div>
-                  <form id="register-form" class="user" onSubmit={this.handleSubmit} noValidate>
+                  <form
+                    id="register-form"
+                    class="user"
+                    onSubmit={this.handleSubmit}
+                    noValidate
+                  >
                     <div class="form-group row">
                       <div class="col-sm-6 mb-3 mb-sm-0">
                         <input
@@ -127,6 +211,7 @@ export default class Register extends React.Component {
                     >
                       Register Account
                     </button>
+                    {exception}
                   </form>
                   <hr />
                   <div class="text-center">
@@ -148,3 +233,18 @@ export default class Register extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return { account: state.account };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticate: (email, name, token) =>
+      dispatch(actions.authenticate(email, name, token)),
+  };
+};
+
+const Component = connect(mapStateToProps, mapDispatchToProps)(Register);
+
+export default Component;

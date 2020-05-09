@@ -37,6 +37,10 @@ yarn-error.log*
 web/build
 server/build
 
+# Ignore env
+web/.env
+server/.env
+
 # Ignore templates content
 web/template/*/*
 !web/template/*/README.md

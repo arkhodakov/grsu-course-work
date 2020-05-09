@@ -3,16 +3,6 @@ import { connect } from "react-redux";
 
 import Navigation from "../navigation";
 
-const mapStateToProps = (state) => {
-  return { 
-    
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +19,14 @@ class Dashboard extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
 
 const Component = connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

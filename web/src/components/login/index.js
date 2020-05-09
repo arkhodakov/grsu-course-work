@@ -3,19 +3,11 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { authAccount } from "../../actions";
+import axios from "axios";
 
-import "./Login.css";
+import * as actions from "../../actions";
 
-const mapStateToProps = (state) => {
-  return { account: state.account };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authenticate: (email, password) => dispatch(authAccount(email, password)),
-  };
-};
+import "./styles.css";
 
 class Login extends React.Component {
   constructor(props) {
@@ -23,6 +15,7 @@ class Login extends React.Component {
 
     this.state = {
       redirect: false,
+      error: null,
       email: "",
       password: "",
     };
@@ -32,9 +25,7 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    const account = this.props.account
-
-    
+    const account = this.props.account;
   }
 
   handleChange = (e) => {
@@ -67,23 +58,49 @@ class Login extends React.Component {
       const email = this.state.email;
       const password = this.state.password;
 
-      // TODO: Authenticate things
+      axios
+        .post(process.env.REACT_APP_API_HOST + "api/v1/account/login", {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          var name = response.data.name;
+          var token = response.data.token;
 
-      // Сохранение результатов в Redux Storage
-      this.props.authenticate(email, password);
+          this.props.authenticate(email, name, token);
 
-      // Обновление редиректа
-      this.setState({
-        redirect: true,
-      });
+          this.setState({
+            redirect: true,
+          });
+        })
+        .catch((error) => {
+          if (error.response) {
+            var message = error.response.data.message;
+            this.setState({
+              error: message,
+            });
+          } else {
+            this.setState({
+              error: "Internal server error : 500",
+            });
+          }
+        });
     }
   };
 
   render() {
-    const redirect = this.state.redirect ? <Redirect to="/dashboard" /> : null;
+    const exception = this.state.error ? (
+      <div class="alert alert-danger mt-2 text-center" role="alert">
+        {this.state.error}
+      </div>
+    ) : (
+      <div class="alert alert-success mt-2 text-center" role="alert">
+        You can connect securely
+      </div>
+    );
     return (
       <div class="container">
-        {redirect}
+        {this.state.redirect ? <Redirect to="/dashboard" /> : null}
         <div class="row justify-content-center h-100">
           <div class="col-xl-10 col-lg-12 col-md-9">
             <div class="card o-hidden border-0 shadow-lg my-5">
@@ -152,6 +169,7 @@ class Login extends React.Component {
                         >
                           Login
                         </button>
+                        {exception}
                       </form>
                       <hr />
                       <div class="text-center">
@@ -175,6 +193,17 @@ class Login extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return { account: state.account };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticate: (email, name, token) =>
+      dispatch(actions.authenticate(email, name, token)),
+  };
+};
 
 const Component = connect(mapStateToProps, mapDispatchToProps)(Login);
 
