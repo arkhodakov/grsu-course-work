@@ -32,7 +32,7 @@ class Register extends React.Component {
     var password = document.getElementsByName("password")[0];
     var passwordCheck = document.getElementsByName("passwordCheck")[0];
 
-    var valid = form.checkValidity() * (password.value == passwordCheck.value);
+    var valid = form.checkValidity() * (password.value === passwordCheck.value);
     return valid;
   }
 
@@ -48,11 +48,11 @@ class Register extends React.Component {
       e.target.classList.remove("valid", "invalid");
     }
 
-    if (name == "password" || name == "passwordCheck") {
+    if (name === "password" || name === "passwordCheck") {
       var password = document.getElementsByName("password")[0];
       var passwordCheck = document.getElementsByName("passwordCheck")[0];
 
-      if (password.value != passwordCheck.value) {
+      if (password.value !== passwordCheck.value) {
         password.classList.remove("valid", "invalid");
         password.classList.add("invalid");
 

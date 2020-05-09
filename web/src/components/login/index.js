@@ -24,10 +24,6 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
-    const account = this.props.account;
-  }
-
   handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;

@@ -1,5 +1,4 @@
 import * as types from "../constants";
-import axios from "axios";
 
 export const logout = () => ({
   type: types.LOGOUT_USER

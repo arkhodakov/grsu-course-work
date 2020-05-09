@@ -4,6 +4,8 @@ import { Link, Redirect } from "react-router-dom";
 
 import * as actions from "../../actions";
 
+import "./style.css"
+
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
@@ -69,7 +71,7 @@ class Navigation extends React.Component {
       <li className="nav-item dropdown no-arrow">
         <a
           className="nav-link dropdown-toggle"
-          href="#"
+          href="#profile"
           id="userDropdown"
           role="button"
           data-toggle="dropdown"
@@ -79,7 +81,7 @@ class Navigation extends React.Component {
           <span className="mr-2 d-none d-lg-inline text-gray-600 small">
             {this.props.account.name}
           </span>
-          <img className="img-profile rounded-circle" src={avatar} />
+          <img className="img-profile rounded-circle" src={avatar} alt="avatar"/>
         </a>
         <div
           className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -100,7 +102,7 @@ class Navigation extends React.Component {
           <div className="dropdown-divider"></div>
           <a
             className="dropdown-item"
-            href="#"
+            href="#logout"
             data-toggle="modal"
             data-target="#logoutModal"
           >
@@ -146,7 +148,7 @@ class Navigation extends React.Component {
           <li className="nav-item dropdown no-arrow d-sm-none">
             <a
               className="nav-link dropdown-toggle"
-              href="#"
+              href="#search"
               id="searchDropdown"
               role="button"
               data-toggle="dropdown"
@@ -181,7 +183,7 @@ class Navigation extends React.Component {
           <li className="nav-item dropdown no-arrow mx-1">
             <a
               className="nav-link dropdown-toggle"
-              href="#"
+              href="#alerts"
               id="alertsDropdown"
               role="button"
               data-toggle="dropdown"
@@ -200,12 +202,6 @@ class Navigation extends React.Component {
             >
               <h6 className="dropdown-header">Alerts Center</h6>
               {alerts}
-              <a
-                className="dropdown-item text-center small text-gray-500"
-                href="#"
-              >
-                Show All Alerts
-              </a>
             </div>
           </li>
 
