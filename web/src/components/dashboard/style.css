@@ -1,0 +1,27 @@
+#dashboard {
+    display: flex;
+    flex-direction: column;
+}
+
+#container-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+#dashboard-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.card-issues {
+    margin: 0px;
+    padding: 0px;
+    min-height: 250px;
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    .col-md-4, .col-md-3, .col-md-2, .col-md-1 {
+        margin-bottom: 1em !important;
+    }
+}
