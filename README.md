@@ -87,6 +87,8 @@ Google Kubernetes Engine - GitHub Actions [Электронный ресурс] 
 
 Deploying a containerized web application [Электронный ресурс] - 2020. - Режим доступа: https://cloud.google.com/kubernetes-engine/docs/tutorials/hello-app. - Дата доступа: 08.05.2020.
 
+Deploying a Node App to Google Cloud with Kubernetes [Электронный ресурс] - 2020. - Режим доступа: https://testdriven.io/blog/deploying-a-node-app-to-google-cloud-with-kubernetes/. -  Дата доступа: 08.05.2020.
+
 ### Backend
 
 How to Prevent SQL Injection in Node.js [Электронный ресурс] - 2018. - Режим доступа: https://www.veracode.com/blog/secure-development/how-prevent-sql-injection-nodejs. - Дата доступа: 27.04.2020.
