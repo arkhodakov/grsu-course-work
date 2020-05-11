@@ -1,6 +1,6 @@
 {
   "name": "cw-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Course Work Bug Tracker backend node server",
   "main": "index.js",
   "scripts": {
