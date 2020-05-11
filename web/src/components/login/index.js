@@ -24,6 +24,18 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    this.props.loadAccount();
+  }
+
+  componentDidUpdate() {
+    if (this.props.account.isAuthenticated && !this.state.redirect) {
+      this.setState({
+        redirect: true,
+      });
+    }
+  }
+
   handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -198,6 +210,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     authenticate: (email, name, token) =>
       dispatch(actions.authenticate(email, name, token)),
+    loadAccount: () => dispatch(actions.load()),
   };
 };
 

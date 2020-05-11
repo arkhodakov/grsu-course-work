@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import Plot from "react-plotly.js";
 
 import Navigation from "../navigation";
 import Sidebar from "../sidebar";
+
+import * as actions from "../../actions";
 
 import "./style.css";
 
@@ -13,8 +16,8 @@ const AddIssueModal = () => {
       className="modal fade"
       tabindex="-1"
       role="dialog"
-      id="issue-add-modal"
-      aria-labelledby="issue-add-modal"
+      id="issue-create-modal"
+      aria-labelledby="issue-create-modal"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered" role="document">
@@ -56,7 +59,21 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      redirect: false,
+    };
+  }
+
+  componentDidMount() {
+    this.props.loadAccount();
+  }
+
+  componentDidUpdate() {
+    if (!this.props.account.isAuthenticated && !this.state.redirect) {
+      this.setState({
+        redirect: true,
+      });
+    }
   }
 
   getIssues(issues) {
@@ -88,6 +105,7 @@ class Dashboard extends React.Component {
 
     return (
       <div id="dashboard">
+        {this.state.redirect ? <Redirect to="/login" /> : null}
         <Navigation />
 
         <div id="container-wrapper">
@@ -134,9 +152,10 @@ class Dashboard extends React.Component {
                         </h6>
                         <a
                           type="button"
+                          href="#issue-create-modal"
                           class="btn btn-primary btn-icon-split text-light"
                           data-toggle="modal"
-                          data-target="#issue-add-modal"
+                          data-target="#issue-create-modal"
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
@@ -214,7 +233,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    loadAccount: () => dispatch(actions.load()),
+  };
 };
 
 const Component = connect(mapStateToProps, mapDispatchToProps)(Dashboard);

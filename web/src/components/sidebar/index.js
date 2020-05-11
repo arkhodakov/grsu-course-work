@@ -15,7 +15,7 @@ export default class Sidebar extends React.Component {
           href="/"
         >
           <div class="sidebar-brand-icon rotate-n-15">
-            <img src="./logo.png" style={{ width: 45 + "px" }} />
+            <img src="./logo.png" style={{ width: 45 + "px" }} alt="sidebar-logo"/>
           </div>
         </a>
 
