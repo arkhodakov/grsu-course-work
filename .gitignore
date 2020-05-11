@@ -4,6 +4,8 @@ pids
 *.seed
 *.pid.lock
 
+.vscode
+
 # Dependency directories
 node_modules/
 jspm_packages/
@@ -34,6 +36,10 @@ yarn-error.log*
 # Ignore build
 web/build
 server/build
+
+# Ignore env
+web/.env
+server/.env
 
 # Ignore templates content
 web/template/*/*

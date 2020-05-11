@@ -1,0 +1,30 @@
+.bg-home {
+  background-image: url(./assets/bg.png);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  min-height: 480px;
+}
+
+.jumbotron .fa {
+  padding: 0.5em;
+  margin: 5px;
+  font-size: 1.25em;
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+.jumbotron .fa:hover {
+  opacity: 0.7;
+  color: white;
+}
+
+.jumbotron .fa-github {
+  background: #212529;
+  color: white;
+}
