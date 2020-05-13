@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Artem Khodakov, Ekaterina Makarova",
+  "author": {
+    "name": "Artem Khodakov",
+    "email": "artem.khodakov.workbox@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^4.0.1",
