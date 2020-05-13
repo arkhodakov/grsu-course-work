@@ -1,12 +1,12 @@
-import * as types from "../constants/issues.constants";
+import * as types from "../constants/users.constants";
 
 const initialState = {
   list: [],
 };
 
-export default function issues(state = initialState, action) {
+export default function users(state = initialState, action) {
   switch (action.type) {
-    case types.UPDATE_ISSUES:
+    case types.UPDATE_USERS:
       return {
         ...state,
         list: action.payload.list,

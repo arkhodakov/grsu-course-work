@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 
 import * as actions from "../../actions";
 
-import "./style.css"
+import "./style.css";
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class Navigation extends React.Component {
     this.state = {
       alerts: [
         {
+          id:1,
           title: "A new monthly report is ready to download!",
           icon: "fa fa-donate text-white",
           description: "December 12, 2019",
@@ -20,6 +21,7 @@ class Navigation extends React.Component {
           type: "primary",
         },
         {
+          id:2,
           title: "$290.29 has been deposited into your account!",
           icon: "fa fa-donate text-white",
           description: "December 7, 2019",
@@ -47,7 +49,7 @@ class Navigation extends React.Component {
     var alerts = this.state.alerts;
     var content = alerts.map((item) => {
       return (
-        <a className="dropdown-item d-flex align-items-center" href={item.link}>
+        <a key={item.id} className="dropdown-item d-flex align-items-center" href={item.link}>
           <div className="mr-3">
             <div className={"icon-circle bg-" + item.type}>
               <i className={item.icon}></i>
@@ -66,7 +68,7 @@ class Navigation extends React.Component {
   getProfile() {
     var avatar = this.props.account.avatar
       ? this.props.account.avatar
-      : "https://unsplash.com/photos/MTZTGvDsHFY/download?force=true&w=640";
+      : "https://unsplash.com/photos/lySzv_cqxH8/download?force=true&w=640";
     return (
       <li className="nav-item dropdown no-arrow">
         <a
@@ -81,7 +83,11 @@ class Navigation extends React.Component {
           <span className="mr-2 d-none d-lg-inline text-gray-600 small">
             {this.props.account.name}
           </span>
-          <img className="img-profile rounded-circle" src={avatar} alt="avatar"/>
+          <img
+            className="img-profile rounded-circle"
+            src={avatar}
+            alt="avatar"
+          />
         </a>
         <div
           className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -145,7 +151,10 @@ class Navigation extends React.Component {
         </form>
 
         <ul className="navbar-nav">
-          <li className="nav-item dropdown no-arrow d-sm-none">
+          <li
+            key="search-button"
+            className="nav-item dropdown no-arrow d-sm-none"
+          >
             <a
               className="nav-link dropdown-toggle"
               href="#search"
@@ -155,24 +164,24 @@ class Navigation extends React.Component {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i className="fa fa-search fa-sm  "></i>
+              <i className="fa fa-search fa-sm"></i>
             </a>
 
             <div
               className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
               aria-labelledby="searchDropdown"
             >
-              <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
+              <form className="form-inline mr-auto w-100 navbar-search">
+                <div className="input-group">
                   <input
                     type="text"
-                    class="form-control bg-light border-0 small"
+                    className="form-control bg-light border-0 small"
                     placeholder="Search for..."
                     aria-label="Search"
                   />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                      <i class="fas fa-search fa-sm"></i>
+                  <div className="input-group-append">
+                    <button className="btn btn-primary" type="button">
+                      <i className="fas fa-search fa-sm"></i>
                     </button>
                   </div>
                 </div>
@@ -180,7 +189,7 @@ class Navigation extends React.Component {
             </div>
           </li>
 
-          <li className="nav-item dropdown no-arrow mx-1">
+          <li key="alerts-button" className="nav-item dropdown no-arrow mx-1">
             <a
               className="nav-link dropdown-toggle"
               href="#alerts"
@@ -204,28 +213,26 @@ class Navigation extends React.Component {
               {alerts}
             </div>
           </li>
-
           <div className="topbar-divider d-none d-sm-block"></div>
-
           {profile}
         </ul>
 
         <div
-          class="modal fade"
+          className="modal fade"
           id="logoutModal"
-          tabindex="-1"
+          tabIndex="-1"
           role="dialog"
           aria-labelledby="logoutModal"
           aria-hidden="true"
         >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="logoutModalLabel">
                   Ready to Leave?
                 </h5>
                 <button
-                  class="close"
+                  className="close"
                   type="button"
                   data-dismiss="modal"
                   aria-label="Close"
@@ -233,20 +240,20 @@ class Navigation extends React.Component {
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 Select "Logout" below if you are ready to end your current
                 session.
               </div>
-              <div class="modal-footer">
+              <div className="modal-footer">
                 <button
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   type="button"
                   data-dismiss="modal"
                 >
                   Cancel
                 </button>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   data-dismiss="modal"
                   onClick={this.onLogoutClick}
@@ -268,10 +275,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(actions.logout()),
+    logout: () => dispatch(actions.accounts.logout()),
   };
 };
 
-const Component = connect(mapStateToProps, mapDispatchToProps)(Navigation);
-
-export default Component;
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

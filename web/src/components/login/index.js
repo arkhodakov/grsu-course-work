@@ -72,10 +72,11 @@ class Login extends React.Component {
           password: password,
         })
         .then((response) => {
+          var id = response.data.id;
           var name = response.data.name;
           var token = response.data.token;
 
-          this.props.authenticate(email, name, token);
+          this.props.authenticate(id, email, name, token);
 
           this.setState({
             redirect: true,
@@ -89,7 +90,7 @@ class Login extends React.Component {
             });
           } else {
             this.setState({
-              error: "Internal server error : 500",
+              error: "Oops... Something wrong",
             });
           }
         });
@@ -98,42 +99,42 @@ class Login extends React.Component {
 
   render() {
     const exception = this.state.error ? (
-      <div class="alert alert-danger mt-2 text-center" role="alert">
+      <div className="alert alert-danger mt-2 text-center" role="alert">
         {this.state.error}
       </div>
     ) : (
-      <div class="alert alert-success mt-2 text-center" role="alert">
+      <div className="alert alert-success mt-2 text-center" role="alert">
         You can connect securely
       </div>
     );
     return (
-      <div class="container">
+      <div className="container">
         {this.state.redirect ? <Redirect to="/dashboard" /> : null}
-        <div class="row justify-content-center h-100">
-          <div class="col-xl-10 col-lg-12 col-md-9">
-            <div class="card o-hidden border-0 shadow-lg my-5">
-              <div class="card-body p-0">
-                <div class="row">
-                  <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                  <div class="col-lg-6">
-                    <div class="p-5">
-                      <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">Bug Tracker</h1>
-                        <h1 class="h6 text-gray-900 mb-4">
+        <div className="row justify-content-center h-100">
+          <div className="col-xl-10 col-lg-12 col-md-9">
+            <div className="card o-hidden border-0 shadow-lg my-5">
+              <div className="card-body p-0">
+                <div className="row">
+                  <div className="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                  <div className="col-lg-6">
+                    <div className="p-5">
+                      <div className="text-center">
+                        <h1 className="h4 text-gray-900 mb-4">Bug Tracker</h1>
+                        <h1 className="h6 text-gray-900 mb-4">
                           Development footage
                         </h1>
                       </div>
                       <form
                         id="login-form"
-                        class="user"
+                        className="user"
                         onSubmit={this.handleSubmit}
                         noValidate
                       >
-                        <div class="form-group">
+                        <div className="form-group">
                           <input
                             type="email"
                             name="email"
-                            class="form-control form-control-user"
+                            className="form-control form-control-user"
                             id="inputEmail"
                             aria-describedby="emailHelp"
                             placeholder="Email"
@@ -142,11 +143,11 @@ class Login extends React.Component {
                             required
                           />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <input
                             type="password"
                             name="password"
-                            class="form-control form-control-user"
+                            className="form-control form-control-user"
                             id="inputPassword"
                             placeholder="Password"
                             value={this.state.password}
@@ -154,16 +155,15 @@ class Login extends React.Component {
                             required
                           />
                         </div>
-                        <div class="form-group">
-                          <div class="custom-control custom-checkbox small">
+                        <div className="form-group">
+                          <div className="custom-control custom-checkbox small">
                             <input
                               type="checkbox"
-                              class="custom-control-input"
+                              className="custom-control-input"
                               id="rememberMeCheck"
                             />
                             <label
-                              class="custom-control-label"
-                              for="rememberMeCheck"
+                              className="custom-control-label"
                             >
                               Remember Me
                             </label>
@@ -180,13 +180,13 @@ class Login extends React.Component {
                         {exception}
                       </form>
                       <hr />
-                      <div class="text-center">
-                        <Link to="/restore" class="small">
+                      <div className="text-center">
+                        <Link to="/restore" className="small">
                           Forgot Password?
                         </Link>
                       </div>
-                      <div class="text-center">
-                        <Link to="/register" class="small">
+                      <div className="text-center">
+                        <Link to="/register" className="small">
                           Create an Account!
                         </Link>
                       </div>
@@ -208,9 +208,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    authenticate: (email, name, token) =>
-      dispatch(actions.authenticate(email, name, token)),
-    loadAccount: () => dispatch(actions.load()),
+    authenticate: (id, email, name, token) =>
+      dispatch(actions.accounts.authenticate(id, email, name, token)),
+    loadAccount: () => dispatch(actions.accounts.load()),
   };
 };
 

@@ -1,27 +1,56 @@
 #dashboard {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 #container-wrapper {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 #dashboard-wrapper {
-    width: 100%;
-    overflow-x: hidden;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.list-group {
+  max-height: 70vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .card-issues {
-    margin: 0px;
-    padding: 0px;
-    min-height: 250px;
-    width: 100%;
+  margin: 0px;
+  padding: 0px;
+  min-height: 250px;
+  width: 100%;
 }
 
-@media (max-width: 576px) {
-    .col-md-4, .col-md-3, .col-md-2, .col-md-1 {
-        margin-bottom: 1em !important;
-    }
+.mb-1em {
+  margin-bottom: 1em !important;
+}
+
+.modal-dialog {
+  width: 75%;
+  max-width: 1060px;
+}
+
+.close {
+  font-size: 20px;
+}
+
+.badge {
+  font-size: 100% !important;
+}
+
+@media (min-width: 720px) {
+  .card-columns {
+    column-count: 1;
+  }
+}
+
+@media (min-width: 960px) {
+  .card-columns {
+    column-count: 2;
+  }
 }

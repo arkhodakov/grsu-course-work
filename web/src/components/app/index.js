@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { PrivateRoute } from "../route/private";
 
@@ -13,22 +14,28 @@ import ForbiddenPage from "../pages-status/Forbidden";
 
 import "./style.css";
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+class App extends React.Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <PrivateRoute
+            exact
+            path="/dashboard"
+            component={() => <Dashboard updateData={() => this.update()} />}
+          />
 
-        <Route exact path="/login" component={Login} />
-        <Route excat path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <Route excat path="/register" component={Register} />
 
-        <Route exact path="/status/forbidden" component={ForbiddenPage} />
-        <Route exact path="/status/notfound" component={NotFoundPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </BrowserRouter>
-  );
+          <Route exact path="/status/forbidden" component={ForbiddenPage} />
+          <Route exact path="/status/notfound" component={NotFoundPage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+export default connect(null, null)(App);
