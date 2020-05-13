@@ -6,4 +6,4 @@ COPY . .
 # Install & Build Web Application --silent
 RUN npm install --silent
 
-CMD ["echo", "'done!''"]
+CMD ["node", "index.js"]
