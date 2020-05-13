@@ -23,7 +23,14 @@ const create = async (req, res) => {
   try {
     const { rows } = await db.pool.query(query, values);
     const token = helper.tokenGenerate(rows[0].id, req.body.email);
-    return res.status(201).send({ token: token, name: req.body.name });
+    return res
+      .status(201)
+      .send({
+        id: rows[0].id,
+        name: rows[0].name,
+        email: rows[0].email,
+        token: token,
+      });
   } catch (error) {
     if (error.routine === "_bt_check_unique") {
       return res
@@ -63,8 +70,10 @@ const login = async (req, res) => {
 
     const token = helper.tokenGenerate(rows[0].id);
     return res.status(200).send({
-      token: token,
+      id: rows[0].id,
       name: rows[0].name,
+      email: rows[0].email,
+      token: token,
     });
   } catch (error) {
     console.log(error);
