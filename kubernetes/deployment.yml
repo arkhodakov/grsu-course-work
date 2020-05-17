@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bt-server
+spec:
+  selector:
+    matchLabels:
+      app: bt-server
+  template:
+    metadata:
+      labels:
+        app: bt-server
+    spec:
+      containers:
+      - name: bt-server
+        image: gcr.io/PROJECT_ID/IMAGE_SERVER
+        env:
+        - name: NODE_ENV
+          value: "development"
+        - name: SSL_FILES
+          value: "0"
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+                name: system-configuration
+                key: jwt-secret
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+                name: database-configuration
+                key: host
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+                name: database-configuration
+                key: database
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+                name: database-configuration
+                key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+                name: database-configuration
+                key: password
+        - name: DB_SSL_CA
+          valueFrom:
+            secretKeyRef:
+                name: database-ssl
+                key: server-ca.pem
+        - name: DB_SSL_KEY
+          valueFrom:
+            secretKeyRef:
+                name: database-ssl
+                key: client-key.pem
+        - name: DB_SSL_CERT
+          valueFrom:
+            secretKeyRef:
+                name: database-ssl
+                key: client-cert.pem
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bt-web
+spec:
+  selector:
+    matchLabels:
+      app: bt-web
+  template:
+    metadata:
+      labels:
+        app: bt-web
+    spec:
+      containers:
+      - name: bt-web
+        image: gcr.io/PROJECT_ID/IMAGE_WEB
+        env:
+        - name: REACT_APP_API_HOST
+          value: "http://34.107.159.190"
+      restartPolicy: Always
