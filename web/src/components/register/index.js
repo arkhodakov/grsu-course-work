@@ -95,7 +95,7 @@ class Register extends React.Component {
     const password = this.state.password;
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "api/v1/account/signup", {
+      .post(process.env.REACT_APP_API_HOST + "api/account/signup", {
         email: email,
         name: name,
         password: password,

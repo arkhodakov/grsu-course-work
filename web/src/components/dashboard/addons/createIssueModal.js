@@ -122,7 +122,7 @@ export default class CreateIssueModal extends React.Component {
     };
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "api/v1/issues", body)
+      .post(process.env.REACT_APP_API_HOST + "api/issues", body)
       .then((response) => {
         this.props.updateIssues();
       })

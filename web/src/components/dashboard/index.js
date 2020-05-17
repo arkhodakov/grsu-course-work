@@ -19,7 +19,7 @@ import "./style.css";
 
 const updateIssues = (next) => {
   axios
-    .get(process.env.REACT_APP_API_HOST + "api/v1/issues")
+    .get(process.env.REACT_APP_API_HOST + "api/issues")
     .then((response) => {
       var issues = response.data.issues;
       console.log("Successfully updated issues!", issues);
@@ -36,7 +36,7 @@ const updateIssues = (next) => {
 
 const updateProjects = (next) => {
   axios
-    .get(process.env.REACT_APP_API_HOST + "api/v1/projects")
+    .get(process.env.REACT_APP_API_HOST + "api/projects")
     .then((response) => {
       var projects = response.data.projects;
       console.log("Successfully updated projects!", projects);
@@ -53,7 +53,7 @@ const updateProjects = (next) => {
 
 const updateUsers = (next) => {
   axios
-    .get(process.env.REACT_APP_API_HOST + "api/v1/users")
+    .get(process.env.REACT_APP_API_HOST + "api/users")
     .then((response) => {
       var users = response.data.users;
       console.log("Successfully updated users!", users);
@@ -192,8 +192,8 @@ class Dashboard extends React.Component {
   componentWillUpdate(props, state) {
     if (!this.state.updated) {
       if (
-        state.issues.length > 0 &&
-        state.projects.length > 0 &&
+        state.issues.length >= 0 &&
+        state.projects.length >= 0 &&
         state.users.length > 0
       ) {
         this.setState({

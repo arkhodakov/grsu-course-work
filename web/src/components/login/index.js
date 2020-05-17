@@ -67,7 +67,7 @@ class Login extends React.Component {
       const password = this.state.password;
 
       axios
-        .post(process.env.REACT_APP_API_HOST + "api/v1/account/login", {
+        .post(process.env.REACT_APP_API_HOST + "api/account/login", {
           email: email,
           password: password,
         })
