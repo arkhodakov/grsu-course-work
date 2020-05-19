@@ -54,3 +54,9 @@
     column-count: 2;
   }
 }
+
+@media (min-width: 1140px) {
+  .card-columns {
+    column-count: 1;
+  }
+}
