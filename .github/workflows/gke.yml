@@ -13,12 +13,12 @@ env:
   GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
   REGISTRY_HOSTNAME: gcr.io
 
-  IMAGE_WEB: bugtracker-web
-  DEPLOYMENT_NAME_WEB: bugtracker-web
+  IMAGE_WEB: bt-web
+  DEPLOYMENT_NAME_WEB: bt-web
   DIRECTORY_WEB: ./web/
 
-  IMAGE_SERVER: bugtracker-server
-  DEPLOYMENT_NAME_SERVER: bugtracker-server
+  IMAGE_SERVER: bt-server
+  DEPLOYMENT_NAME_SERVER: bt-server
   DIRECTORY_SERVER: ./server/
 
 jobs:
