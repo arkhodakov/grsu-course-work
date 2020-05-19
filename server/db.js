@@ -4,7 +4,9 @@ dotenv.config();
 
 const { Pool } = require("pg");
 
-const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_DATABASE}`;
+const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@
+${process.env.DB_HOST}/${process.env.DB_DATABASE}`;
+
 const ssl =
   process.env.SSL_FILES == 0
     ? {
@@ -22,7 +24,7 @@ const ssl =
 
 const pool = new Pool({
   connectionString: connectionString,
-  // ssl: ssl,
+  ssl: ssl,
 });
 
 const sql_initial_commands = fs
@@ -37,19 +39,21 @@ pool.connect(async (err, client, release) => {
     console.info("[DB] Connected successfully!");
   }
 
-  console.log("[DB] Initial setup...")
+  console.log("[DB] Initial setup...");
   for (command in sql_initial_commands) {
     const sql = sql_initial_commands[command].trim();
     client.query(sql, (err, result) => {
       if (err) {
         console.warn("[DB] WARN: ", err.message);
       } else {
-        console.log(`[DB] Query '${sql.substring(0,35)}'... processed successfully`)
+        console.log(
+          `[DB] Query '${sql.substring(0, 35)}'... processed successfully`
+        );
       }
     });
   }
   release();
-  console.log("[DB] Done. Connection released.")
+  console.log("[DB] Done. Connection released.");
 });
 
 module.exports = { pool };
