@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: bt-server
-        image: gcr.io/PROJECT_ID/IMAGE_SERVER
+        image: gcr.io/PROJECT_ID/IMAGE_SERVER:TAG
         env:
         - name: NODE_ENV
           value: "development"
@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
       - name: bt-web
-        image: gcr.io/PROJECT_ID/IMAGE_WEB
+        image: gcr.io/PROJECT_ID/IMAGE_WEB:TAG
         env:
         - name: REACT_APP_API_HOST
           value: "http://34.107.159.190"
