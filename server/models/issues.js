@@ -28,25 +28,37 @@ const create = async (req, res) => {
   const token = req.headers["authentication"];
   const account = helper.tokenAccount(token);
 
-  const query = `INSERT 
-  INTO issues(name, content, priority, status, creator, assignee, due_date)
-  VALUES ($1, $2, $3, $4, $5, $6, $7)
-  returning *`;
-  const values = [
-    req.body.title,
-    req.body.content,
-    req.body.priority,
-    "TO_DO",
-    account.id,
-    req.body.assignee,
-    req.body.due_date,
-  ];
-
   try {
-    const { rows } = await db.pool.query(query, values);
-    return res.status(200).send({ issue: rows[0] });
+    db.pool.connect((err, client, release) => {
+      const { rows } = client.query(
+        `INSERT INTO issues(name, content, priority, status, creator, assignee, due_date)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      returning id`,
+        [
+          req.body.title,
+          req.body.content,
+          req.body.priority,
+          "TO_DO",
+          account.id,
+          req.body.assignee,
+          req.body.due_date,
+        ]
+      );
+
+      client.query(
+        `INSERT
+        INTO issues_list(project_id, issues_id)
+        VALUES ($1, $2)
+        returning *`,
+        [req.body.project, rows[0].id]
+      );
+
+      release();
+
+      return res.status(200).send({ id: rows[0].id });
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).send(error);
   }
 };

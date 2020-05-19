@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bt-postgres
+  labels:
+    name: database
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: bt-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:10.5-alpine
+        volumeMounts:
+        - name: postgres-volume-mount
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-configuration
+              key: user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-configuration
+              key: password
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: database-configuration
+              key: database
+      restartPolicy: Always
+      volumes:
+      - name: postgres-volume-mount
+        persistentVolumeClaim:
+          claimName: bt-postgre-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bt-postgres-service
+spec:
+  selector:
+    service: bt-postgres
+  type: ClusterIP
+  ports:
+  - port: 5432

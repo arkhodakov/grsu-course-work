@@ -1,61 +1,94 @@
-name: Build & Deploy > GKE
+name: Google Kubernetes Engine
 
 on:
-  push:
-    branches:
-    - master
+  release:
+    types: [created]
 
+# Environment variables available to all jobs and steps in this workflow
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1   
-  GKE_ZONE: us-central1-c  
-  IMAGE: static-site
+  GKE_PROJECT: ${{ secrets.GKE_PROJECT }}
+  GKE_EMAIL: ${{ secrets.GKE_EMAIL }}
+  GITHUB_SHA: ${{ github.sha }}
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+  REGISTRY_HOSTNAME: gcr.io
+
+  IMAGE_WEB: bugtracker-web
+  DEPLOYMENT_NAME_WEB: bugtracker-web
+  DIRECTORY_WEB: ./web/
+
+  IMAGE_SERVER: bugtracker-server
+  DEPLOYMENT_NAME_SERVER: bugtracker-server
+  DIRECTORY_SERVER: ./server/
 
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-
     steps:
+
     - name: Checkout
       uses: actions/checkout@v2
 
     # Setup gcloud CLI
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
-        version: '286.0.0'
-        service_account_email: ${{ secrets.GKE_SA_EMAIL }}
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
-        project_id: ${{ secrets.GKE_PROJECT }}
+        version: '270.0.0'
+        service_account_email: ${{ secrets.GKE_EMAIL }}
+        service_account_key: ${{ secrets.GKE_KEY }}
 
-    # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
-    - run: |-
-        gcloud --quiet auth configure-docker
-    # Get the GKE credentials so we can deploy to the cluster
-    - run: |-
-        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
-    # Build the Docker image
-    - name: Build
-      run: |-
-        docker build \
-          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+    # Configure docker to use the gcloud command-line tool as a credential helper
+    - run: |
+        gcloud auth configure-docker
+
     # Set up kustomize
     - name: Set up Kustomize
-      run: |-
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+      run: |
+        curl -o kustomize --location https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
-    # Deploy the Docker image to the GKE cluster
-    - name: Deploy
-      run: |-
-        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$IMAGE
+
+    # ------------------------------- #
+    # ----- Build & Push Server ----- #
+    # ------------------------------- #
+
+    # Build the Docker image
+    - name: Server - Build
+      run: |        
+        docker build -t "$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$IMAGE_SERVER":"$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" $DIRECTORY_SERVER
+
+    # Push the Docker image to Google Container Registry
+    - name: Server - Publish
+      run: |
+        docker push $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE_SERVER:$GITHUB_SHA
+
+    # ---------------------------- #
+    # ----- Build & Push Web ----- #
+    # ---------------------------- #
+
+    # Build the Docker image
+    - name: Web - Build
+      run: |        
+        docker build -t "$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$IMAGE_WEB":"$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" $DIRECTORY_WEB
+
+    # Push the Docker image to Google Container Registry
+    - name: Web - Publish
+      run: |
+        docker push $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE_WEB:$GITHUB_SHA
+
+    # ---------------------------- #
+    # ---------- Deploy ---------- #
+    # ---------------------------- #
+
+    - name: Deploy & Rollout changes
+      run: |
+        gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $GKE_PROJECT
+        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE_SERVER:TAG=$REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE_SERVER:${GITHUB_SHA}
+        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE_WEB:TAG=$REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE_WEB:${GITHUB_SHA}
+        ./kustomize build ./kubernetes | kubectl apply -f -
+        kubectl rollout status deployment/$DEPLOYMENT_NAME_SERVER
+        kubectl rollout status deployment/$DEPLOYMENT_NAME_WEB
         kubectl get services -o wide

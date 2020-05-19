@@ -1,5 +1,7 @@
 # NPM : Node Modules
 node_modules
 
+.env
+
 # Custom : Build & Templates directories
 build

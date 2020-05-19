@@ -38,11 +38,11 @@
     "rsuite": "^4.5.0"
   },
   "scripts": {
-    "start": "react-scripts --max_old_space_size=4096 start",
-    "start-secure": "HTTPS=true && react-scripts --max_old_space_size=4096 start",
-    "build": "react-scripts --max_old_space_size=4096 build",
-    "test": "react-scripts --max_old_space_size=4096 test",
-    "eject": "react-scripts --max_old_space_size=4096 eject"
+    "start": "react-scripts --max_old_space_size=8192 start",
+    "start-secure": "HTTPS=true && react-scripts --max_old_space_size=8192 start",
+    "build": "react-scripts --max_old_space_size=8192 build",
+    "test": "react-scripts --max_old_space_size=8192 test",
+    "eject": "react-scripts --max_old_space_size=8192 eject"
   },
   "eslintConfig": {
     "extends": "react-app"
