@@ -11,10 +11,10 @@ import rootReducer from "./reducers";
 
 import App from "./components/app";
 
+import package from "../package.json";
+
 import dotenv from "dotenv";
 dotenv.config();
-
-import package from "../package.json";
 
 console.log(`Starting... ${package.name} ${package.version}`)
 
