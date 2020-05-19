@@ -11,12 +11,12 @@ import rootReducer from "./reducers";
 
 import App from "./components/app";
 
-import package from "../package.json";
+import packageConfiguration from "../package.json";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-console.log(`Starting... ${package.name} ${package.version}`)
+console.log(`Starting... ${packageConfiguration.name} ${packageConfiguration.version}`)
 
 export const store = createStore(
   rootReducer,

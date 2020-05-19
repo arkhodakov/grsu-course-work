@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 
 import * as actions from "../../actions";
 
-import package from "../../../package.json";
+import packageConfiguration from "../../../package.json";
 
 import "./style.css";
 
@@ -71,7 +71,7 @@ class Navigation extends React.Component {
           <div className="text-center p-1">
             <h6>
               This is a development build. Version:{" "}
-              {package.version}
+              {packageConfiguration.version}
             </h6>
           </div>
         </div>
