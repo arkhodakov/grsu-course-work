@@ -1,6 +1,7 @@
 # CW: Bug Tracker
 
-![Docker](https://github.com/akhodakov/grsu-course-work/workflows/Docker/badge.svg?branch=master)
+![Docker Packages](https://github.com/akhodakov/grsu-course-work/workflows/Docker%20Packages/badge.svg)
+![Google Kubernetes Engine](https://github.com/akhodakov/grsu-course-work/workflows/Google%20Kubernetes%20Engine/badge.svg)
 
 Курсовой проект 6-го семестра специальности **УИР-171**
 
