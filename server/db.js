@@ -4,8 +4,7 @@ dotenv.config();
 
 const { Pool } = require("pg");
 
-const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@
-${process.env.DB_HOST}/${process.env.DB_DATABASE}`;
+const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_DATABASE}`;
 
 const ssl =
   process.env.SSL_FILES == 0
@@ -24,7 +23,7 @@ const ssl =
 
 const pool = new Pool({
   connectionString: connectionString,
-  ssl: ssl,
+  // ssl: ssl,
 });
 
 const sql_initial_commands = fs
