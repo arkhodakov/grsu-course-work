@@ -17,6 +17,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 console.log(`Starting... ${packageConfiguration.name} ${packageConfiguration.version}`)
+console.log("ENV. Configuration:", process.env)
 
 export const store = createStore(
   rootReducer,

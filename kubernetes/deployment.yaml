@@ -79,5 +79,5 @@ spec:
         image: gcr.io/PROJECT_ID/IMAGE_WEB:TAG
         env:
         - name: REACT_APP_API_HOST
-          value: "http://34.107.159.190"
+          value: "http://34.107.159.190/"
       restartPolicy: Always
