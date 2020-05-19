@@ -13,7 +13,7 @@ class Navigation extends React.Component {
     this.state = {
       alerts: [
         {
-          id:1,
+          id: 1,
           title: "A new monthly report is ready to download!",
           icon: "fa fa-donate text-white",
           description: "December 12, 2019",
@@ -21,7 +21,7 @@ class Navigation extends React.Component {
           type: "primary",
         },
         {
-          id:2,
+          id: 2,
           title: "$290.29 has been deposited into your account!",
           icon: "fa fa-donate text-white",
           description: "December 7, 2019",
@@ -45,11 +45,47 @@ class Navigation extends React.Component {
 
   onSearch = () => {};
 
+  getDevelopmentBadge() {
+    return (
+      <li key="development-button" className="nav-item dropdown no-arrow mx-1">
+        <a
+          className="nav-link dropdown-toggle"
+          href="#development"
+          id="developmentDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i className="fas fa-hammer"></i>
+          <span className="badge badge-danger badge-counter">?</span>
+        </a>
+
+        <div
+          className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+          aria-labelledby="alertsDropdown"
+        >
+          <h6 className="dropdown-header">Development Footage</h6>
+          <div className="text-center p-1">
+            <h6>
+              This is a development build. Version:{" "}
+              {process.env.REACT_APP_VERSION}
+            </h6>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
   getAlerts() {
     var alerts = this.state.alerts;
     var content = alerts.map((item) => {
       return (
-        <a key={item.id} className="dropdown-item d-flex align-items-center" href={item.link}>
+        <a
+          key={item.id}
+          className="dropdown-item d-flex align-items-center"
+          href={item.link}
+        >
           <div className="mr-3">
             <div className={"icon-circle bg-" + item.type}>
               <i className={item.icon}></i>
@@ -121,6 +157,11 @@ class Navigation extends React.Component {
   }
 
   render() {
+    const developmentBadge =
+      process.env.NODE_ENV === "development"
+        ? this.getDevelopmentBadge()
+        : null;
+
     var alerts = this.getAlerts();
     var profile = this.getProfile();
 
@@ -213,6 +254,7 @@ class Navigation extends React.Component {
               {alerts}
             </div>
           </li>
+          {developmentBadge}
           <div className="topbar-divider d-none d-sm-block"></div>
           {profile}
         </ul>
