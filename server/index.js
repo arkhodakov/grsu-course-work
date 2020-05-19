@@ -19,6 +19,8 @@ const authentication = require("./middleware/auth");
 const port = process.env.SERVER_PORT || 5536;
 const app = express();
 
+console.log("ENV. Configuration:", process.env)
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
