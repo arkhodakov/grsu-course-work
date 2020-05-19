@@ -14,7 +14,9 @@ import App from "./components/app";
 import dotenv from "dotenv";
 dotenv.config();
 
-console.log(`Starting... ${process.env.REACT_APP_NAME} ${process.env.REACT_APP_VERSION}`)
+import package from "../package.json";
+
+console.log(`Starting... ${package.name} ${package.version}`)
 
 export const store = createStore(
   rootReducer,
