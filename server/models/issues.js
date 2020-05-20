@@ -14,7 +14,7 @@ const list = async (req, res) => {
 
 const create = async (req, res) => {
   if (
-    !req.body.title ||
+    !req.body.name ||
     !req.body.content ||
     !req.body.priority ||
     !req.body.assignee ||
@@ -29,13 +29,13 @@ const create = async (req, res) => {
   const account = helper.tokenAccount(token);
 
   try {
-    db.pool.connect((err, client, release) => {
-      const { rows } = client.query(
+    db.pool.connect(async (err, client, release) => {
+      const { rows } = await client.query(
         `INSERT INTO issues(name, content, priority, status, creator, assignee, due_date)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       returning id`,
         [
-          req.body.title,
+          req.body.name,
           req.body.content,
           req.body.priority,
           "TO_DO",
@@ -45,9 +45,9 @@ const create = async (req, res) => {
         ]
       );
 
-      client.query(
+      await client.query(
         `INSERT
-        INTO issues_list(project_id, issues_id)
+        INTO issues_list(project_id, issue_id)
         VALUES ($1, $2)
         returning *`,
         [req.body.project, rows[0].id]
@@ -70,9 +70,6 @@ const update = async (req, res) => {
       .send({ message: "Some necessary parameters aren't specified" });
   }
 
-  const token = req.headers["Authentication"];
-  const account = helper.tokenAccount(token);
-
   const query = `UPDATE issues
     SET name=$2, priority=$3, status=$4, assignee=$5, due_date=$6
     WHERE id=$1
@@ -94,8 +91,33 @@ const update = async (req, res) => {
   }
 };
 
+const remove = async (req, res) => {
+  if (!req.body.id) {
+    return res
+      .status(400)
+      .send({ message: "Some necessary parameters aren't specified" });
+  }
+
+  try {
+    db.pool.connect((err, client, release) => {
+      client.query(`DELETE FROM issues_list WHERE issue_id=$1 returning *`, [
+        req.body.id,
+      ]);
+
+      client.query(`DELETE FROM issues WHERE id=$1 returning *`, [req.body.id]);
+
+      release();
+
+      return res.status(200).send();
+    });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
 module.exports = {
   list,
   create,
   update,
+  remove,
 };

@@ -26,13 +26,26 @@
   width: 100%;
 }
 
+.issue-container a {
+  opacity: 1;
+}
+
+.issue-controls {
+  width: 48px;
+}
+
 .mb-1em {
   margin-bottom: 1em !important;
 }
 
 .modal-dialog {
-  width: 75%;
-  max-width: 1060px;
+  width:  auto;
+  min-width: 25%;
+  max-width: 75%;
+}
+
+.delete-modal-dialog {
+  width: 25%;
 }
 
 .close {

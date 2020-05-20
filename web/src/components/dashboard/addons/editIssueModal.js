@@ -56,39 +56,50 @@ const colourStyles = {
   singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
 };
 
-const initialState = {
-  name: null,
-  content: null,
-  assignee: null,
-  priority: null,
-  project: null,
-  due_date: null,
-};
+const priorities = [
+  { value: "LOW", label: "Low", color: "#1cc88a" },
+  { value: "MEDIUM", label: "Medium", color: "#f6c23e" },
+  { value: "HIGH", label: "High", color: "#e74a3b" },
+];
 
-export default class CreateIssueModal extends React.Component {
+const statuses = [
+  { value: "TO_DO", label: "To Do", color: "#1cc88a" },
+  { value: "IN_PROGRESS", label: "In Progress", color: "#f6c23e" },
+  { value: "DONE", label: "Done", color: "#e74a3b" },
+];
+
+export default class EditIssueModal extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ...initialState,
+      id: null,
+      name: null,
+      content: null,
+      assignee: null,
+      priority: null,
+      status: null,
+      project: null,
+      due_date: null,
       users: [],
       projects: [],
     };
 
     this.onChange = this.onChange.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
-    this.onCreate = this.onCreate.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   componentWillReceiveProps(props) {
     this.setState({
+      ...props.issue,
       users: props.users,
       projects: props.projects,
     });
   }
 
   componentDidMount() {
-    const dayPicker = document.getElementsByClassName("DayPickerInput")[0];
+    const dayPicker = document.getElementsByClassName("DayPickerInput")[1];
     const input = dayPicker.children[0];
 
     input.classList.add("form-control");
@@ -115,19 +126,24 @@ export default class CreateIssueModal extends React.Component {
     }
   };
 
-  onCreate = (e) => {
+  onSave = (e) => {
+    e.target.disabled = true;
+
     var body = {
+      id: this.state.id,
       name: this.state.name,
       content: this.state.content,
       assignee: this.state.assignee,
       priority: this.state.priority,
+      status: this.state.status,
       project: this.state.project,
       due_date: this.state.due_date,
     };
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "api/issues", body)
+      .put(process.env.REACT_APP_API_HOST + "api/issues", body)
       .then((response) => {
+        console.log(response)
         this.props.update();
       })
       .catch((error) => {
@@ -137,10 +153,9 @@ export default class CreateIssueModal extends React.Component {
         }
       });
 
-    this.setState({
-      ...this.state,
-      ...initialState
-    })
+    e.target.disabled = false;
+
+    this.props.update();
   };
 
   render() {
@@ -157,14 +172,14 @@ export default class CreateIssueModal extends React.Component {
         className="modal fade"
         tabIndex="-1"
         role="dialog"
-        id="issue-create-modal"
-        aria-labelledby="issue-create-modal"
+        id="issue-edit-modal"
+        aria-labelledby="issue-edit-modal"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Create new issue</h5>
+              <h5 className="modal-title">Edit existing issue</h5>
               <button
                 type="button"
                 className="close"
@@ -184,10 +199,11 @@ export default class CreateIssueModal extends React.Component {
                         className="form-control"
                         name="name"
                         placeholder="Title"
+                        value={this.state.name}
                         onChange={this.onChange}
                       />
                       <small className="form-text text-muted">
-                        We'll never share your email with anyone else.
+                        Shortly describe your idea or your problem
                       </small>
                     </div>
                     <div className="form-group">
@@ -195,6 +211,7 @@ export default class CreateIssueModal extends React.Component {
                         className="form-control"
                         name="content"
                         rows="3"
+                        value={this.state.content}
                         onChange={this.onChange}
                       ></textarea>
                     </div>
@@ -204,6 +221,9 @@ export default class CreateIssueModal extends React.Component {
                     <Select
                       name="assignee"
                       options={users}
+                      value={users.find(
+                        (user) => user.id === this.state.assignee
+                      )}
                       onChange={(data) => this.onChange(data, "assignee")}
                     />
 
@@ -212,13 +232,25 @@ export default class CreateIssueModal extends React.Component {
                     <label>Priority</label>
                     <Select
                       name="priority"
-                      options={[
-                        { value: "LOW", label: "Low", color: "#1cc88a" },
-                        { value: "MEDIUM", label: "Medium", color: "#f6c23e" },
-                        { value: "HIGH", label: "High", color: "#e74a3b" },
-                      ]}
+                      options={priorities}
                       styles={colourStyles}
+                      value={priorities.find(
+                        (priority) => priority.value === this.state.priority
+                      )}
                       onChange={(data) => this.onChange(data, "priority")}
+                    />
+
+                    <hr />
+
+                    <label>Status</label>
+                    <Select
+                      name="status"
+                      options={statuses}
+                      styles={colourStyles}
+                      value={statuses.find(
+                        (status) => status.value === this.state.status
+                      )}
+                      onChange={(data) => this.onChange(data, "status")}
                     />
 
                     <hr />
@@ -227,13 +259,19 @@ export default class CreateIssueModal extends React.Component {
                     <Select
                       name="project"
                       options={projects}
+                      value={projects.find(
+                        (project) => project.id === this.state.project
+                      )}
                       onChange={(data) => this.onChange(data, "project")}
                     />
 
                     <hr />
 
                     <div className="text-center w-100">
-                      <DayPickerInput onDayChange={this.onDateChange} />
+                      <DayPickerInput
+                        onDayChange={this.onDateChange}
+                        value={new Date(this.state.due_date)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -250,9 +288,9 @@ export default class CreateIssueModal extends React.Component {
                   type="button"
                   className="btn btn-outline-success"
                   data-dismiss="modal"
-                  onClick={this.onCreate}
+                  onClick={this.onSave}
                 >
-                  Create
+                  Save
                 </button>
               </div>
             </form>

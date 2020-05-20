@@ -10,6 +10,8 @@ import Navigation from "../navigation";
 import Sidebar from "../sidebar";
 
 import IssueModal from "./addons/createIssueModal";
+import EditIssueModal from "./addons/editIssueModal";
+import DeleteIssueModal from "./addons/deleteIssueModal";
 import { Text } from "../utils/text";
 
 import * as actions from "../../actions";
@@ -23,7 +25,7 @@ const updateIssues = (next) => {
     .then((response) => {
       var issues = response.data.issues;
       console.log("Successfully updated issues!", issues);
-      next(issues);
+      next(issues, null);
     })
     .catch((error) => {
       console.log("Error during issues update!");
@@ -31,6 +33,8 @@ const updateIssues = (next) => {
         console.log("Error message: " + error.response.data.message);
       }
       console.error(error);
+
+      next(null, error);
     });
 };
 
@@ -176,6 +180,8 @@ const priorityPie = (issues) => {
   );
 };
 
+const invalidToken = "The token you provided is invalid";
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -183,10 +189,62 @@ class Dashboard extends React.Component {
     this.state = {
       redirect: false,
       updated: false,
+      selected: {
+        issue: null,
+      },
       issues: [],
       projects: [],
       users: [],
     };
+  }
+
+  requestErrorHandler = (error) => {
+    if (error.response) {
+      if (
+        error.response.status === 400 &&
+        error.response.data.message === invalidToken
+      ) {
+        this.props.logout();
+        this.setState({
+          redirect: true,
+        });
+      }
+    }
+  };
+
+  update() {
+    return new Promise(() => {
+      this.props.loadAccount();
+
+      updateIssues((issues, error) => {
+        if (error) {
+          this.requestErrorHandler(error);
+        } else {
+          this.setState({ issues: issues });
+        }
+      });
+
+      updateProjects((projects, error) => {
+        if (error) {
+          this.requestErrorHandler(error);
+        } else {
+          this.setState({ projects: projects });
+        }
+      });
+
+      updateUsers((users, error) => {
+        if (error) {
+          this.requestErrorHandler(error);
+        } else {
+          this.setState({ users: users });
+        }
+      });
+    }).then(() => {
+      this.setState({
+        ...this.state,
+        updated: true,
+      });
+    });
   }
 
   componentWillUpdate(props, state) {
@@ -204,13 +262,9 @@ class Dashboard extends React.Component {
   }
 
   componentWillMount() {
-    this.props.loadAccount();
-
-    updateIssues((issues) => this.setState({ issues: issues }));
-
-    updateProjects((projects) => this.setState({ projects: projects }));
-
-    updateUsers((users) => this.setState({ users: users }));
+    if (!this.state.updated) {
+      this.update();
+    }
   }
 
   componentDidUpdate() {
@@ -222,6 +276,15 @@ class Dashboard extends React.Component {
   }
 
   getIssues(issues) {
+    const selectIssue = (id) => {
+      this.setState({
+        ...this.state,
+        selected: {
+          issue: id,
+        },
+      });
+    };
+
     return (
       <div className="list-group w-100">
         {issues.map((item) => {
@@ -273,7 +336,14 @@ class Dashboard extends React.Component {
               break;
           }
 
-          var statusContent = (<span className={"text-" + color}>{status}</span>)
+          var statusContent = <span className={"text-" + color}>{status}</span>;
+
+          var creator = this.state.users.find((x) => x.id === item.creator);
+          var creatorContent = creator ? (
+            <span>
+              Creator: <b>{creator.name}</b>
+            </span>
+          ) : null;
 
           var assignee = this.state.users.find((x) => x.id === item.assignee);
           var assigneeContent = assignee ? (
@@ -286,7 +356,7 @@ class Dashboard extends React.Component {
             <li
               key={item.id}
               className={
-                "list-group-item list-group-item-action flex-column align-items-start " +
+                "issue-container list-group-item list-group-item-action flex-column align-items-start " +
                 border
               }
             >
@@ -301,9 +371,30 @@ class Dashboard extends React.Component {
               <p className="mb-1">
                 <Text content={item.content} limit={120} />
               </p>
-              <small>
-                {assigneeContent} - {statusContent}
-              </small>
+              <div className="d-flex w-100 justify-content-between">
+                <small>
+                  {creatorContent} - {assigneeContent} - {statusContent}
+                </small>
+                <span className="issue-controls d-flex justify-content-between">
+                  <a
+                    href="#editIssue"
+                    data-toggle="modal"
+                    data-target="#issue-edit-modal"
+                    onClick={() => selectIssue(item.id)}
+                  >
+                    <i className="fa fa-pencil" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    href="#deleteIssue"
+                    className="text-danger"
+                    data-toggle="modal"
+                    data-target="#issue-delete-modal"
+                    onClick={() => selectIssue(item.id)}
+                  >
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </a>
+                </span>
+              </div>
             </li>
           );
         })}
@@ -466,9 +557,19 @@ class Dashboard extends React.Component {
           <IssueModal
             projects={this.state.updated ? this.state.projects : []}
             users={this.state.updated ? this.state.users : []}
-            updateIssues={() =>
-              updateIssues((issues) => this.setState({ issues }))
-            }
+            update={() => this.update()}
+          />
+          <EditIssueModal
+            projects={this.state.updated ? this.state.projects : []}
+            users={this.state.updated ? this.state.users : []}
+            issue={this.state.issues.find(
+              (x) => x.id === this.state.selected.issue
+            )}
+            update={() => this.update()}
+          />
+          <DeleteIssueModal
+            id={this.state.selected.issue}
+            update={() => this.update()}
           />
           <div id="dashboard-wrapper" className="d-flex flex-column">
             <div className="container-fluid">
@@ -493,6 +594,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadAccount: () => dispatch(actions.accounts.load()),
+    logout: () => dispatch(actions.accounts.logout()),
     update_projects: (projects) => dispatch(actions.projects.update(projects)),
     update_issues: (issues) => dispatch(actions.issues.update(issues)),
     update_users: (users) => dispatch(actions.users.update(users)),
