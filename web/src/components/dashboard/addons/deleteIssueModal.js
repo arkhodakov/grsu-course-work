@@ -1,11 +1,5 @@
 import React from "react";
 import axios from "axios";
-import chroma from "chroma-js";
-
-import Select from "react-select";
-
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import "react-day-picker/lib/style.css";
 
 const initialState = {
   id: null,

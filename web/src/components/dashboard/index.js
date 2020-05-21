@@ -386,7 +386,7 @@ class Dashboard extends React.Component {
                   </a>
                   <a
                     href="#deleteIssue"
-                    className="text-danger"
+                    className="text-danger ml-2"
                     data-toggle="modal"
                     data-target="#issue-delete-modal"
                     onClick={() => selectIssue(item.id)}

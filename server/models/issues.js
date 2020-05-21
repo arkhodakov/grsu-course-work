@@ -71,12 +71,13 @@ const update = async (req, res) => {
   }
 
   const query = `UPDATE issues
-    SET name=$2, priority=$3, status=$4, assignee=$5, due_date=$6
+    SET name=$2, content=$3, priority=$4, status=$5, assignee=$6, due_date=$7
     WHERE id=$1
     returning *`;
   const values = [
     req.body.id,
     req.body.name,
+    req.body.content,
     req.body.priority,
     req.body.status,
     req.body.assignee,
